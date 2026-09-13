@@ -83,11 +83,6 @@ export default function Footer() {
           <p className="footer-copyright">
             © {new Date().getFullYear()} BRICS-CLIMATY. All rights reserved.
           </p>
-          <div className="footer-attribution">
-            <span>Powered by Framer</span>
-            <span className="dot-separator">•</span>
-            <span>Created by Fluxory Studio</span>
-          </div>
         </div>
       </div>
     </footer>
