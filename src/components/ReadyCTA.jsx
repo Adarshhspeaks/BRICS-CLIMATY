@@ -18,11 +18,11 @@ export default function ReadyCTA() {
             Book a free 30-minute consultation to get a carbon footprint estimate and discover sustainability opportunities for your business.
           </p>
           <div className="ready-cta-actions">
-            <Link to="/contact" className="btn btn-dark btn-lg">
-              Book Free Consultation
+            <Link to="/feedback" className="btn btn-dark btn-lg">
+              Share Your Feedback
             </Link>
-            <Link to="/service" className="btn btn-outline-white btn-lg">
-              Sustainability Guide
+            <Link to="/impact" className="btn btn-outline-white btn-lg">
+              Explore Impact
             </Link>
           </div>
         </div>

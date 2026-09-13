@@ -27,11 +27,8 @@ export default function Navbar() {
   const navLinks = [
     { name: 'Home', path: '/' },
     { name: 'About Us', path: '/about' },
-    { name: 'Services', path: '/service' },
     { name: 'Impact', path: '/impact' },
-    { name: 'Project', path: '/project' },
-    { name: 'Pricing', path: '/pricing' },
-    { name: 'Contact Us', path: '/contact' },
+    { name: 'Feedback', path: '/feedback' },
   ];
 
   return (
@@ -68,8 +65,8 @@ export default function Navbar() {
 
         {/* Action Button */}
         <div className="navbar-actions">
-          <Link to="/contact" className="btn btn-primary btn-sm nav-cta-btn">
-            Get Assessment
+          <Link to="/feedback" className="btn btn-primary btn-sm nav-cta-btn">
+            Give Feedback
           </Link>
 
           {/* Mobile Hamburger Button */}
@@ -103,8 +100,8 @@ export default function Navbar() {
             })}
           </ul>
           <div className="mobile-nav-footer">
-            <Link to="/contact" className="btn btn-primary btn-lg mobile-cta-btn">
-              Get Free Assessment
+            <Link to="/feedback" className="btn btn-primary btn-lg mobile-cta-btn">
+              Give Feedback
             </Link>
             <div className="mobile-socials">
               <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="social-link">LinkedIn</a>

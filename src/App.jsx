@@ -13,6 +13,7 @@ import Projects from './pages/Projects';
 import ProjectDetail from './pages/ProjectDetail';
 import Pricing from './pages/Pricing';
 import Contact from './pages/Contact';
+import Feedback from './pages/Feedback';
 import StyleGuide from './pages/StyleGuide';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfService from './pages/TermsOfService';
@@ -27,13 +28,14 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
+          <Route path="/impact" element={<Impact />} />
+          <Route path="/feedback" element={<Feedback />} />
+          <Route path="/contact" element={<Feedback />} />
           <Route path="/service" element={<Services />} />
           <Route path="/service/:slug" element={<ServiceDetail />} />
-          <Route path="/impact" element={<Impact />} />
           <Route path="/project" element={<Projects />} />
           <Route path="/project/:slug" element={<ProjectDetail />} />
           <Route path="/pricing" element={<Pricing />} />
-          <Route path="/contact" element={<Contact />} />
           <Route path="/style-guide" element={<StyleGuide />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/terms-of-service" element={<TermsOfService />} />
