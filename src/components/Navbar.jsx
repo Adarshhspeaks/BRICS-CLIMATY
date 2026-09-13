@@ -38,11 +38,13 @@ export default function Navbar() {
       <div className="navbar-container">
         {/* Logo */}
         <Link to="/" className="navbar-logo" aria-label="BRICS-CLIMATY Home">
-          <div className="logo-icon-wrapper">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z" fill="#1b4332" stroke="#1b4332" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </div>
+          <img 
+            src="/assets/brics-logo.png" 
+            alt="BRICS-CLIMATY Logo" 
+            className="navbar-logo-img" 
+            width="40" 
+            height="40" 
+          />
           <span className="logo-text">BRICS-CLIMATY</span>
         </Link>
 

@@ -10,11 +10,13 @@ export default function Footer() {
           {/* Brand Info */}
           <div className="footer-brand-col">
             <Link to="/" className="footer-logo">
-              <div className="footer-logo-icon">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z" fill="#1b4332" stroke="#1b4332" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </div>
+              <img 
+                src="/assets/brics-logo.png" 
+                alt="BRICS-CLIMATY Logo" 
+                className="footer-logo-img" 
+                width="44" 
+                height="44" 
+              />
               <span className="footer-logo-text">BRICS-CLIMATY</span>
             </Link>
             <p className="footer-description">
