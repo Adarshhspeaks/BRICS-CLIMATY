@@ -14,6 +14,8 @@ import ProjectDetail from './pages/ProjectDetail';
 import Pricing from './pages/Pricing';
 import Contact from './pages/Contact';
 import Feedback from './pages/Feedback';
+import CleanAir from './pages/CleanAir';
+import ClimateResilience from './pages/ClimateResilience';
 import StyleGuide from './pages/StyleGuide';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfService from './pages/TermsOfService';
@@ -28,6 +30,10 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
+          <Route path="/clean-air" element={<CleanAir />} />
+          <Route path="/climate-resilience" element={<ClimateResilience />} />
+          <Route path="/clean-air-climate-resilience" element={<CleanAir />} />
+          <Route path="/cacr" element={<CleanAir />} />
           <Route path="/impact" element={<Impact />} />
           <Route path="/feedback" element={<Feedback />} />
           <Route path="/contact" element={<Feedback />} />

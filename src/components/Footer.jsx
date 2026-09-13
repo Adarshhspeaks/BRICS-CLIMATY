@@ -50,6 +50,8 @@ export default function Footer() {
             <ul className="footer-link-list">
               <li><Link to="/" className="footer-link">Home</Link></li>
               <li><Link to="/about" className="footer-link">About Us</Link></li>
+              <li><Link to="/clean-air" className="footer-link">Clean Air</Link></li>
+              <li><Link to="/climate-resilience" className="footer-link">Climate Resilience</Link></li>
               <li><Link to="/impact" className="footer-link">Impact</Link></li>
               <li><Link to="/feedback" className="footer-link">Feedback</Link></li>
             </ul>

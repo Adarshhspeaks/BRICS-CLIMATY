@@ -27,6 +27,8 @@ export default function Navbar() {
   const navLinks = [
     { name: 'Home', path: '/' },
     { name: 'About Us', path: '/about' },
+    { name: 'Clean Air', path: '/clean-air' },
+    { name: 'Climate Resilience', path: '/climate-resilience' },
     { name: 'Impact', path: '/impact' },
     { name: 'Feedback', path: '/feedback' },
   ];
