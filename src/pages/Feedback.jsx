@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import FAQAccordion from '../components/FAQAccordion';
 import { supabase, isSupabaseConfigured } from '../lib/supabaseClient';
 import './Feedback.css';
 
@@ -20,25 +19,6 @@ const ratingLabels = {
   4: 'Very Good Experience',
   5: 'Outstanding Experience!'
 };
-
-const feedbackFaqs = [
-  {
-    question: "How is my feedback utilized at BRICS-CLIMATY?",
-    answer: "Every piece of feedback is directly reviewed by our climate policy, technology, and research teams. It informs our platform roadmap, data visualizations, and strategic decarbonization frameworks across all BRICS partner initiatives."
-  },
-  {
-    question: "Will I receive a direct response to my submission?",
-    answer: "Yes! If you provide your email address, our team typically acknowledges and responds to inquiries or actionable suggestions within 24 to 48 hours."
-  },
-  {
-    question: "Is my personal and organizational information kept confidential?",
-    answer: "Absolutely. All submissions are encrypted and handled in strict compliance with international privacy standards and our Privacy Policy. We never sell or distribute your data to third parties."
-  },
-  {
-    question: "Can I submit institutional research or partnership proposals here?",
-    answer: "Yes, select 'Partnership Suggestion' or 'Policy & Research' as the category, and provide relevant context or links in the message area. Our partnership coordinators will reach out directly."
-  }
-];
 
 export default function Feedback() {
   const [category, setCategory] = useState('General Feedback');
@@ -486,23 +466,6 @@ export default function Feedback() {
 
             </div>
 
-          </div>
-        </div>
-      </section>
-
-      {/* FAQ Section */}
-      <section className="feedback-faqs-section">
-        <div className="container">
-          <div className="text-center mb-40">
-            <div className="badge-pill mb-16">
-              <span className="badge-dot"></span>
-              <span>Common Questions</span>
-            </div>
-            <h2 className="section-title">Frequently Asked Questions</h2>
-            <p className="section-subtitle">Everything you need to know about feedback, suggestions, and research contributions.</p>
-          </div>
-          <div className="faq-container-narrow">
-            <FAQAccordion items={feedbackFaqs} />
           </div>
         </div>
       </section>
