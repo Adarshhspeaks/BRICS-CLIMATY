@@ -71,46 +71,46 @@ export default function Feedback() {
     setSubmitError('');
 
     try {
-      if (isSupabaseConfigured() && supabase) {
-        const { error } = await supabase
-          .from('feedback')
-          .insert([
-            {
-              name: formData.name.trim(),
-              email: formData.email.trim(),
-              organization: formData.organization.trim() || null,
-              category,
-              rating,
-              nps_score: nps,
-              subject: formData.subject.trim() || null,
-              message: formData.message.trim(),
-              subscribe_newsletter: formData.subscribeNewsletter
-            }
-          ]);
+      if (!isSupabaseConfigured() || !supabase) {
+        throw new Error('Supabase is not configured or dev server was not restarted. Please refresh the browser.');
+      }
 
-        if (error) {
-          console.error('Supabase feedback insert error:', error);
-          throw new Error(error.message || 'Failed to submit feedback. Please try again.');
-        }
-
-        // Also add to newsletter if opted in
-        if (formData.subscribeNewsletter) {
-          try {
-            await supabase
-              .from('newsletter_subscribers')
-              .insert([{ email: formData.email.trim().toLowerCase() }]);
-          } catch (nlErr) {
-            console.warn('Newsletter subscribe secondary notice:', nlErr);
+      const { data, error } = await supabase
+        .from('feedback')
+        .insert([
+          {
+            name: formData.name.trim(),
+            email: formData.email.trim(),
+            organization: formData.organization.trim() || null,
+            category,
+            rating,
+            nps_score: nps,
+            subject: formData.subject.trim() || null,
+            message: formData.message.trim(),
+            subscribe_newsletter: formData.subscribeNewsletter
           }
+        ]);
+
+      if (error) {
+        console.error('Supabase feedback insert error:', error);
+        throw new Error(error.message || 'Failed to submit feedback.');
+      }
+
+      // Also add to newsletter if opted in
+      if (formData.subscribeNewsletter) {
+        try {
+          await supabase
+            .from('newsletter_subscribers')
+            .insert([{ email: formData.email.trim().toLowerCase() }]);
+        } catch (nlErr) {
+          console.warn('Newsletter subscribe secondary notice:', nlErr);
         }
-      } else {
-        // Simulated submission if Supabase keys are not configured yet
-        await new Promise(resolve => setTimeout(resolve, 600));
       }
 
       setSubmitted(true);
     } catch (err) {
-      setSubmitError(err.message || 'There was an issue submitting your feedback. Please try again or email us directly.');
+      console.error('Submission error:', err);
+      setSubmitError(err.message || 'There was an issue submitting your feedback. Please try again.');
     } finally {
       setIsSubmitting(false);
     }

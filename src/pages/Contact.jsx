@@ -30,32 +30,32 @@ export default function Contact() {
     setSubmitError('');
 
     try {
-      if (isSupabaseConfigured() && supabase) {
-        const { error } = await supabase
-          .from('contact_inquiries')
-          .insert([
-            {
-              name: formData.name.trim(),
-              email: formData.email.trim(),
-              company: formData.company.trim() || null,
-              service: formData.service,
-              energy_bill: formData.energyBill.trim() || null,
-              message: formData.message.trim()
-            }
-          ]);
+      if (!isSupabaseConfigured() || !supabase) {
+        throw new Error('Supabase is not configured or dev server was not restarted. Please refresh the browser.');
+      }
 
-        if (error) {
-          console.error('Supabase contact insert error:', error);
-          throw new Error(error.message || 'Failed to submit consultation request. Please try again.');
-        }
-      } else {
-        // Simulated fallback
-        await new Promise(resolve => setTimeout(resolve, 600));
+      const { error } = await supabase
+        .from('contact_inquiries')
+        .insert([
+          {
+            name: formData.name.trim(),
+            email: formData.email.trim(),
+            company: formData.company.trim() || null,
+            service: formData.service,
+            energy_bill: formData.energyBill.trim() || null,
+            message: formData.message.trim()
+          }
+        ]);
+
+      if (error) {
+        console.error('Supabase contact insert error:', error);
+        throw new Error(error.message || 'Failed to submit consultation request. Please try again.');
       }
 
       setSubmitted(true);
     } catch (err) {
-      setSubmitError(err.message || 'There was an error submitting your request. Please try again or email us directly.');
+      console.error('Submission error:', err);
+      setSubmitError(err.message || 'There was an error submitting your request. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
