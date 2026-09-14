@@ -17,7 +17,7 @@ import Feedback from './pages/Feedback';
 import CleanAir from './pages/CleanAir';
 import ClimateResilience from './pages/ClimateResilience';
 import StyleGuide from './pages/StyleGuide';
-import PrivacyPolicy from './pages/PrivacyPolicy';
+import PrivacyPolicy from './pages/LegalPrivacy';
 import TermsOfService from './pages/TermsOfService';
 import NotFound from './pages/NotFound';
 
