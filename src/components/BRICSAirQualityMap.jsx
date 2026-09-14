@@ -1,9 +1,10 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 import {
   MapContainer,
   TileLayer,
   CircleMarker,
-  Popup
+  Popup,
+  useMap
 } from "react-leaflet";
 
 import "leaflet/dist/leaflet.css";
@@ -17,7 +18,6 @@ const countries = [
     lng: -51.925,
     city: "Brasília",
     aqi: 42,
-
     metrics: [
       {
         name: "PM2.5 (Fine Particles)",
@@ -49,15 +49,13 @@ const countries = [
       }
     ]
   },
-
   {
     name: "Russia",
     code: "RU",
-    lat: 61.524,
-    lng: 105.318,
+    lat: 55.7558,
+    lng: 37.6173,
     city: "Moscow",
     aqi: 58,
-
     metrics: [
       {
         name: "PM2.5 (Fine Particles)",
@@ -70,7 +68,7 @@ const countries = [
         name: "PM10 (Coarse Dust)",
         current: "26.2 µg/m³",
         target: "< 20 µg/m³",
-        status: "Moderate / Monitoring Required",
+        status: "Moderate / Monitored",
         score: 78
       },
       {
@@ -89,15 +87,13 @@ const countries = [
       }
     ]
   },
-
   {
     name: "India",
     code: "IN",
-    lat: 20.593,
-    lng: 78.962,
+    lat: 28.6139,
+    lng: 77.209,
     city: "New Delhi",
     aqi: 145,
-
     metrics: [
       {
         name: "PM2.5 (Fine Particles)",
@@ -129,15 +125,13 @@ const countries = [
       }
     ]
   },
-
   {
     name: "China",
     code: "CN",
-    lat: 35.861,
-    lng: 104.195,
+    lat: 39.9042,
+    lng: 116.4074,
     city: "Beijing",
     aqi: 96,
-
     metrics: [
       {
         name: "PM2.5 (Fine Particles)",
@@ -169,15 +163,13 @@ const countries = [
       }
     ]
   },
-
   {
     name: "South Africa",
     code: "ZA",
-    lat: -30.559,
-    lng: 22.937,
+    lat: -25.7479,
+    lng: 28.2293,
     city: "Pretoria",
     aqi: 72,
-
     metrics: [
       {
         name: "PM2.5 (Fine Particles)",
@@ -190,7 +182,7 @@ const countries = [
         name: "PM10 (Coarse Dust)",
         current: "27.4 µg/m³",
         target: "< 20 µg/m³",
-        status: "Moderate / Monitoring Required",
+        status: "Moderate / Monitored",
         score: 80
       },
       {
@@ -221,40 +213,44 @@ const getAQIColor = (aqi) => {
 };
 
 const getAQILabel = (aqi) => {
-  if (aqi <= 50) return "Good";
-  if (aqi <= 100) return "Moderate";
+  if (aqi <= 50) return "Good / Low Exposure";
+  if (aqi <= 100) return "Moderate / Standard";
   if (aqi <= 150) return "Unhealthy for Sensitive Groups";
-  if (aqi <= 200) return "Unhealthy";
-  if (aqi <= 300) return "Very Unhealthy";
+  if (aqi <= 200) return "Unhealthy / Active Action";
+  if (aqi <= 300) return "Very Unhealthy / Alerts";
   return "Hazardous";
 };
 
+// MapController ensures proper sizing and smooth centering
+function MapController({ selectedCountry }) {
+  const map = useMap();
+
+  React.useEffect(() => {
+    if (!map) return;
+    const timer = setTimeout(() => {
+      map.invalidateSize();
+    }, 150);
+    const handleResize = () => map.invalidateSize();
+    window.addEventListener("resize", handleResize);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [map]);
+
+  React.useEffect(() => {
+    if (!map || !selectedCountry) return;
+    map.flyTo([selectedCountry.lat, selectedCountry.lng], 4, {
+      duration: 1.2,
+      easeLinearity: 0.25
+    });
+  }, [map, selectedCountry]);
+
+  return null;
+}
+
 export default function BRICSAirQualityMap() {
   const [selectedCountry, setSelectedCountry] = useState(countries[2]);
-  const mapRef = useRef(null);
-
-  // Fix: Leaflet initializes before the CSS grid finishes laying out
-  // .map-container, so it calculates the wrong size on first render.
-  // invalidateSize() forces it to recheck its container dimensions.
-  useEffect(() => {
-    if (mapRef.current) {
-      const timer = setTimeout(() => {
-        mapRef.current.invalidateSize();
-      }, 200);
-      return () => clearTimeout(timer);
-    }
-  }, []);
-
-  // Keep the map correctly sized if the window/container is resized.
-  useEffect(() => {
-    const handleResize = () => {
-      if (mapRef.current) {
-        mapRef.current.invalidateSize();
-      }
-    };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
 
   return (
     <section className="brics-map-section">
@@ -270,8 +266,7 @@ export default function BRICSAirQualityMap() {
           </h2>
 
           <p className="section-subtitle">
-            Select a BRICS country to explore its atmospheric
-            indicators and air quality parameters.
+            Select a BRICS member state or click map markers to explore live atmospheric parameters and airshed indicators.
           </p>
         </div>
 
@@ -279,19 +274,14 @@ export default function BRICSAirQualityMap() {
           {/* INTERACTIVE MAP */}
           <div className="map-container">
             <MapContainer
-              center={[20, 40]}
-              zoom={2}
+              center={[selectedCountry.lat, selectedCountry.lng]}
+              zoom={3}
               scrollWheelZoom={false}
               className="brics-map"
-              ref={mapRef}
-              whenReady={() => {
-                if (mapRef.current) {
-                  setTimeout(() => mapRef.current.invalidateSize(), 100);
-                }
-              }}
             >
+              <MapController selectedCountry={selectedCountry} />
               <TileLayer
-                attribution="&copy; OpenStreetMap contributors"
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               />
 
@@ -299,12 +289,12 @@ export default function BRICSAirQualityMap() {
                 <CircleMarker
                   key={country.code}
                   center={[country.lat, country.lng]}
-                  radius={14}
+                  radius={selectedCountry.code === country.code ? 18 : 14}
                   pathOptions={{
                     fillColor: getAQIColor(country.aqi),
-                    color: "#ffffff",
-                    weight: 3,
-                    fillOpacity: 0.9
+                    color: selectedCountry.code === country.code ? "#ffffff" : "#00140c",
+                    weight: selectedCountry.code === country.code ? 3.5 : 2,
+                    fillOpacity: 0.92
                   }}
                   eventHandlers={{
                     click: () => setSelectedCountry(country)
@@ -327,13 +317,31 @@ export default function BRICSAirQualityMap() {
                 </CircleMarker>
               ))}
             </MapContainer>
+
+            <div className="aqi-map-legend">
+              <span className="legend-title">AQI Index</span>
+              <div className="legend-scale">
+                <span style={{ background: "#22c55e" }} title="Good (0-50)"></span>
+                <span style={{ background: "#eab308" }} title="Moderate (51-100)"></span>
+                <span style={{ background: "#f97316" }} title="Sensitive (101-150)"></span>
+                <span style={{ background: "#ef4444" }} title="Unhealthy (151-200)"></span>
+                <span style={{ background: "#9333ea" }} title="Very Unhealthy (201-300)"></span>
+              </div>
+              <div className="legend-range">
+                <span>0 (Clean)</span>
+                <span>300+</span>
+              </div>
+            </div>
           </div>
 
           {/* COUNTRY AIR QUALITY PANEL */}
           <div className="country-air-panel">
-            <span className="panel-label">SELECTED BRICS COUNTRY</span>
+            <span className="panel-label">SELECTED BRICS NATION</span>
 
-            <h2>{selectedCountry.name}</h2>
+            <div className="panel-header-row">
+              <h2>{selectedCountry.name}</h2>
+              <span className="country-code-pill">{selectedCountry.code}</span>
+            </div>
 
             {/* AQI CARD */}
             <div
@@ -341,7 +349,7 @@ export default function BRICSAirQualityMap() {
               style={{ borderColor: getAQIColor(selectedCountry.aqi) }}
             >
               <span className="aqi-number">{selectedCountry.aqi}</span>
-              <span className="aqi-text">Air Quality Index</span>
+              <span className="aqi-text">Air Quality Index (AQI)</span>
             </div>
 
             <div className="air-status">
@@ -349,7 +357,7 @@ export default function BRICSAirQualityMap() {
                 className="status-dot"
                 style={{ background: getAQIColor(selectedCountry.aqi) }}
               />
-              {getAQILabel(selectedCountry.aqi)}
+              <span>{getAQILabel(selectedCountry.aqi)}</span>
             </div>
 
             {/* DYNAMIC AIR QUALITY METRICS */}
@@ -381,14 +389,29 @@ export default function BRICSAirQualityMap() {
             {/* COUNTRY INFORMATION */}
             <div className="country-info-grid">
               <div className="country-info-card">
-                <span>Monitoring City</span>
+                <span>Monitoring Station</span>
                 <strong>{selectedCountry.city}</strong>
               </div>
 
               <div className="country-info-card">
-                <span>Country Code</span>
-                <strong>{selectedCountry.code}</strong>
+                <span>Framework Status</span>
+                <strong className="text-green">Active CACR</strong>
               </div>
+            </div>
+
+            {/* COUNTRY SWITCHER */}
+            <div className="aqi-country-switcher">
+              {countries.map((c) => (
+                <button
+                  key={c.code}
+                  className={`aqi-switch-btn ${
+                    selectedCountry.code === c.code ? "active" : ""
+                  }`}
+                  onClick={() => setSelectedCountry(c)}
+                >
+                  {c.code}
+                </button>
+              ))}
             </div>
           </div>
         </div>
