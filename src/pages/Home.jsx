@@ -2,8 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import PartnersMarquee from '../components/PartnersMarquee';
 import FAQAccordion from '../components/FAQAccordion';
-import ReadyCTA from '../components/ReadyCTA';
-import NewsletterCTA from '../components/NewsletterCTA';
 import './Home.css';
 
 export default function Home() {
@@ -390,10 +388,6 @@ export default function Home() {
           <FAQAccordion />
         </div>
       </section>
-
-      {/* Ready CTA & Newsletter */}
-      <ReadyCTA />
-      <NewsletterCTA />
     </div>
   );
 }
