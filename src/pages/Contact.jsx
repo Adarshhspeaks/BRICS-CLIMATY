@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import FAQAccordion from '../components/FAQAccordion';
 import NewsletterCTA from '../components/NewsletterCTA';
+import { supabase, isSupabaseConfigured } from '../lib/supabaseClient';
 import './Contact.css';
 
 export default function Contact() {
@@ -13,6 +14,8 @@ export default function Contact() {
     message: ''
   });
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
 
   const handleChange = (e) => {
     setFormData({
@@ -21,9 +24,41 @@ export default function Contact() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setSubmitted(true);
+    setIsSubmitting(true);
+    setSubmitError('');
+
+    try {
+      if (isSupabaseConfigured() && supabase) {
+        const { error } = await supabase
+          .from('contact_inquiries')
+          .insert([
+            {
+              name: formData.name.trim(),
+              email: formData.email.trim(),
+              company: formData.company.trim() || null,
+              service: formData.service,
+              energy_bill: formData.energyBill.trim() || null,
+              message: formData.message.trim()
+            }
+          ]);
+
+        if (error) {
+          console.error('Supabase contact insert error:', error);
+          throw new Error(error.message || 'Failed to submit consultation request. Please try again.');
+        }
+      } else {
+        // Simulated fallback
+        await new Promise(resolve => setTimeout(resolve, 600));
+      }
+
+      setSubmitted(true);
+    } catch (err) {
+      setSubmitError(err.message || 'There was an error submitting your request. Please try again or email us directly.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -74,6 +109,20 @@ export default function Contact() {
                 <form className="contact-form" onSubmit={handleSubmit}>
                   <h2 className="form-title">Request a Free Energy Audit</h2>
                   
+                  {submitError && (
+                    <div style={{
+                      padding: '12px 16px',
+                      background: '#fee2e2',
+                      border: '1px solid #ef4444',
+                      borderRadius: '8px',
+                      color: '#991b1b',
+                      fontSize: '14px',
+                      marginBottom: '20px'
+                    }}>
+                      ⚠️ {submitError}
+                    </div>
+                  )}
+
                   <div className="form-row">
                     <div className="form-group">
                       <label className="form-label">Full Name *</label>
@@ -103,29 +152,29 @@ export default function Contact() {
 
                   <div className="form-row">
                     <div className="form-group">
-                      <label className="form-label">Company Name *</label>
+                      <label className="form-label">Company / Organization</label>
                       <input 
                         type="text" 
                         name="company" 
                         className="form-input" 
-                        placeholder="Acme Industries"
+                        placeholder="e.g. Acme Corp"
                         value={formData.company}
                         onChange={handleChange}
-                        required 
                       />
                     </div>
                     <div className="form-group">
-                      <label className="form-label">Primary Service of Interest</label>
+                      <label className="form-label">Primary Interest</label>
                       <select 
                         name="service" 
-                        className="form-input"
+                        className="form-select"
                         value={formData.service}
                         onChange={handleChange}
                       >
-                        <option value="commercial-residential-solar-installation">Solar & Energy Storage</option>
+                        <option value="commercial-residential-solar-installation">Solar Energy Installation</option>
                         <option value="carbon-footprint-analysis">Carbon Footprint Analysis</option>
-                        <option value="sustainable-building-design-consulting">Green Building & LEED</option>
+                        <option value="sustainable-building-design-consulting">Green Building & LEED Certification</option>
                         <option value="smart-waste-management-reduction-solutions">Smart Waste Management</option>
+                        <option value="other">General Sustainability Consulting</option>
                       </select>
                     </div>
                   </div>
@@ -155,8 +204,8 @@ export default function Contact() {
                     ></textarea>
                   </div>
 
-                  <button type="submit" className="btn btn-primary btn-lg submit-btn">
-                    Book Free Consultation
+                  <button type="submit" disabled={isSubmitting} className="btn btn-primary btn-lg submit-btn">
+                    {isSubmitting ? 'Submitting Request...' : 'Book Free Consultation'}
                   </button>
                 </form>
               )}

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import FAQAccordion from '../components/FAQAccordion';
+import { supabase, isSupabaseConfigured } from '../lib/supabaseClient';
 import './Feedback.css';
 
 const categories = [
@@ -54,6 +55,7 @@ export default function Feedback() {
   });
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -63,17 +65,60 @@ export default function Feedback() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setTimeout(() => {
-      setIsSubmitting(false);
+    setSubmitError('');
+
+    try {
+      if (isSupabaseConfigured() && supabase) {
+        const { error } = await supabase
+          .from('feedback')
+          .insert([
+            {
+              name: formData.name.trim(),
+              email: formData.email.trim(),
+              organization: formData.organization.trim() || null,
+              category,
+              rating,
+              nps_score: nps,
+              subject: formData.subject.trim() || null,
+              message: formData.message.trim(),
+              subscribe_newsletter: formData.subscribeNewsletter
+            }
+          ]);
+
+        if (error) {
+          console.error('Supabase feedback insert error:', error);
+          throw new Error(error.message || 'Failed to submit feedback. Please try again.');
+        }
+
+        // Also add to newsletter if opted in
+        if (formData.subscribeNewsletter) {
+          try {
+            await supabase
+              .from('newsletter_subscribers')
+              .upsert([{ email: formData.email.trim() }], { onConflict: 'email' });
+          } catch (nlErr) {
+            console.warn('Newsletter subscribe secondary error:', nlErr);
+          }
+        }
+      } else {
+        // Simulated submission if Supabase keys are not configured yet
+        await new Promise(resolve => setTimeout(resolve, 600));
+      }
+
       setSubmitted(true);
-    }, 600);
+    } catch (err) {
+      setSubmitError(err.message || 'There was an issue submitting your feedback. Please try again or email us directly.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleReset = () => {
     setSubmitted(false);
+    setSubmitError('');
     setFormData({
       name: '',
       email: '',
@@ -150,6 +195,20 @@ export default function Feedback() {
                 <form onSubmit={handleSubmit} className="feedback-form">
                   <h2 className="form-heading">Share Your Experience</h2>
                   <p className="form-subheading">Select a category and let us know how we can serve you better.</p>
+
+                  {submitError && (
+                    <div style={{
+                      padding: '12px 16px',
+                      background: '#fee2e2',
+                      border: '1px solid #ef4444',
+                      borderRadius: '8px',
+                      color: '#991b1b',
+                      fontSize: '14px',
+                      marginBottom: '20px'
+                    }}>
+                      ⚠️ {submitError}
+                    </div>
+                  )}
 
                   {/* Category Selection */}
                   <div className="form-group">

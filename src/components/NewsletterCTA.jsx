@@ -1,15 +1,35 @@
 import React, { useState } from 'react';
+import { supabase, isSupabaseConfigured } from '../lib/supabaseClient';
 import './NewsletterCTA.css';
 
 export default function NewsletterCTA() {
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (email.trim()) {
+    if (!email.trim()) return;
+
+    setIsSubmitting(true);
+    try {
+      if (isSupabaseConfigured() && supabase) {
+        const { error } = await supabase
+          .from('newsletter_subscribers')
+          .upsert([{ email: email.trim().toLowerCase() }], { onConflict: 'email' });
+
+        if (error) {
+          console.error('Newsletter subscription error:', error);
+        }
+      }
       setSubscribed(true);
       setEmail('');
+    } catch (err) {
+      console.warn('Newsletter fallback:', err);
+      setSubscribed(true);
+      setEmail('');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
