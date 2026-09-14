@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import CarbonCalculator from '../components/CarbonCalculator';
 import ReadyCTA from '../components/ReadyCTA';
 import NewsletterCTA from '../components/NewsletterCTA';
 import './Services.css';
@@ -98,6 +99,9 @@ export default function Services() {
           </div>
         </div>
       </section>
+
+      {/* Interactive Carbon Offset & Solar ROI Calculator */}
+      <CarbonCalculator />
 
       <ReadyCTA />
       <NewsletterCTA />

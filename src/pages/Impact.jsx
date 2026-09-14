@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import CarbonCalculator from '../components/CarbonCalculator';
 import PartnersMarquee from '../components/PartnersMarquee';
 import ReadyCTA from '../components/ReadyCTA';
 import NewsletterCTA from '../components/NewsletterCTA';
@@ -82,6 +83,9 @@ export default function Impact() {
           </div>
         </div>
       </section>
+
+      {/* Interactive Carbon Offset & Solar ROI Calculator */}
+      <CarbonCalculator />
 
       <PartnersMarquee />
 
