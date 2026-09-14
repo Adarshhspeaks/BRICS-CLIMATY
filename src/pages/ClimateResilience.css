@@ -153,9 +153,15 @@
   color: var(--text-muted, #556960);
 }
 
+/* Live Weather Section */
+.brics-weather-section {
+  padding: 80px 0;
+}
+
 /* Risk Matrix Card */
 .risk-matrix-section {
   padding: 80px 0;
+  background: var(--bg-secondary, #f8faf9);
 }
 
 .risk-matrix-card {

@@ -1,3 +1,4 @@
+import BRICSAirQualityMap from '../components/BRICSAirQualityMap';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import FAQAccordion from '../components/FAQAccordion';
@@ -157,6 +158,8 @@ export default function CleanAir() {
           </div>
         </div>
       </section>
+      <BRICSAirQualityMap />
+      
 
       {/* 4 Clean Air Pillars */}
       <section className="section clean-air-pillars-section">

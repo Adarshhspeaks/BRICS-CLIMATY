@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import BRICSWeatherMap from '../components/BRICSWeatherMap';
 import FAQAccordion from '../components/FAQAccordion';
 import ReadyCTA from '../components/ReadyCTA';
+
 import './ClimateResilience.css';
 
 const resilienceDimensions = [
@@ -194,6 +196,24 @@ export default function ClimateResilience() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Live BRICS Weather Monitoring Map */}
+      <section className="section brics-weather-section">
+        <div className="container">
+          <div className="text-center mb-40">
+            <div className="badge-pill mb-16">
+              <span className="badge-dot"></span>
+              <span>Live Climate Monitoring</span>
+            </div>
+            <h2 className="section-title">Real-Time Weather Across BRICS Member States</h2>
+            <p className="section-subtitle">
+              Live conditions and 5-day outlooks for each BRICS capital, tracking the extreme heat, storm, and flood risk drivers behind our resilience strategy.
+            </p>
+          </div>
+
+          <BRICSWeatherMap />
         </div>
       </section>
 
