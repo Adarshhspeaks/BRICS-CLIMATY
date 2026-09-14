@@ -98,30 +98,6 @@ export default function Home() {
     }
   ];
 
-  const testimonials = [
-    {
-      number: '/001',
-      name: 'Willow Maya',
-      role: 'Head of Operations, EcoTech Energy',
-      quote: 'The ROI was immediate. Within six months of implementing their solar solutions, our energy costs dropped 55%. The team handled everything from permits to installation flawlessly.',
-      avatar: '/assets/j7IgTTiMBlOV06MaJzWzmoPNw5k.png'
-    },
-    {
-      number: '/002',
-      name: 'Olivia Maya',
-      role: 'Sustainability Director, Horizon Corp',
-      quote: 'Working with BRICS-CLIMATY transformed our entire approach to sustainability. Not only did we achieve carbon neutrality two years ahead of schedule, but we also saved $2M in operational costs. Their expertise is unmatched.',
-      avatar: '/assets/dgPGRfxB7ngWR4EA5vLMmpWEf5I.png'
-    },
-    {
-      number: '/003',
-      name: 'Joth Smith',
-      role: 'Chief Impact Officer, Novus Group',
-      quote: 'Their carbon audit revealed opportunities we never knew existed. The roadmap was clear, achievable, and aligned with our business goals. Highly recommend to any company serious about sustainability.',
-      avatar: '/assets/46De3EP856BP5nf1kfYTsOIIqqw.png'
-    }
-  ];
-
   return (
     <div className="home-page">
       {/* =========================================================================
@@ -461,53 +437,13 @@ export default function Home() {
       </section>
 
       {/* =========================================================================
-          SECTION 06: TESTIMONIALS
-          ========================================================================= */}
-      <section className="section testimonials-section">
-        <div className="container">
-          <div className="section-badge-wrapper">
-            <span className="section-badge">
-              <span className="section-number">&#123; 06 &#125;</span>
-              Trusted by Industry Leaders
-            </span>
-          </div>
-
-          <div className="section-heading-wrapper">
-            <h2 className="section-heading">What Our Partners Say</h2>
-            <p className="section-subheading">
-              Our proven sustainability solutions are trusted by top organizations to reduce emissions, cut costs, and achieve measurable impact.
-            </p>
-          </div>
-
-          <div className="testimonials-grid">
-            {testimonials.map((t, idx) => (
-              <div key={idx} className="testimonial-card">
-                <div className="testimonial-header">
-                  <span className="testimonial-number">{t.number}</span>
-                  <div className="testimonial-stars">★★★★★</div>
-                </div>
-                <p className="testimonial-quote">"{t.quote}"</p>
-                <div className="testimonial-author">
-                  <img src={t.avatar} alt={t.name} className="author-avatar" />
-                  <div>
-                    <h4 className="author-name">{t.name}</h4>
-                    <span className="author-role">{t.role}</span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* =========================================================================
-          SECTION 07: FAQS
+          SECTION 06: FAQS
           ========================================================================= */}
       <section className="section faq-section" id="faq">
         <div className="container">
           <div className="section-badge-wrapper" style={{ justifyContent: 'center' }}>
             <span className="section-badge">
-              <span className="section-number">&#123; 07 &#125;</span>
+              <span className="section-number">&#123; 06 &#125;</span>
               Frequently Asked Questions
             </span>
           </div>
