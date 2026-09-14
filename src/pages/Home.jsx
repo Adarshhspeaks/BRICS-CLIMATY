@@ -101,24 +101,34 @@ export default function Home() {
   return (
     <div className="home-page">
       {/* =========================================================================
-          HERO SECTION
+          HERO SECTION (FULL BACKGROUND)
           ========================================================================= */}
-      <section className="hero-section">
-        <div className="container">
+      <section className="hero-section hero-full-bg">
+        {/* Background Image Layer & Atmospheric Overlays */}
+        <div className="hero-bg-layer">
+          <img 
+            src="/assets/ibAgROfpxJ6EiOkukBxvK41iIA.png" 
+            alt="Wind turbines in golden farmland" 
+            className="hero-bg-image"
+          />
+          <div className="hero-bg-overlay"></div>
+        </div>
+
+        <div className="container hero-container">
           <div className="hero-content">
             {/* Top Badge */}
-            <div className="hero-badge">
-              <span className="hero-badge-pill">2026</span>
-              <span className="hero-badge-text">Latest Update: Renewable energy has grown</span>
+            <div className="hero-badge glass-badge">
+              <span className="hero-badge-pill">MISSION 2026</span>
+              <span className="hero-badge-text">90% Clean Energy Growth Target</span>
             </div>
 
             {/* Headline */}
-            <h1 className="hero-title">
+            <h1 className="hero-title hero-title-white">
               Build a Greener Tomorrow, Starting Today
             </h1>
 
             {/* Subheadline */}
-            <p className="hero-subtitle">
+            <p className="hero-subtitle hero-subtitle-white">
               Leading sustainability consultants helping businesses reduce carbon emissions, save costs, and create lasting environmental impact. Join 500+ companies on the path to net-zero.
             </p>
 
@@ -131,57 +141,59 @@ export default function Home() {
                   <polyline points="12 5 19 12 12 19"></polyline>
                 </svg>
               </Link>
-              <Link to="/service" className="btn btn-secondary btn-lg">
+              <Link to="/service" className="btn btn-secondary-glass btn-lg">
                 Explore Our Solutions
               </Link>
             </div>
 
-            {/* Hero Visual Card / Grid */}
-            <div className="hero-card-grid">
-              {/* Main Banner Card */}
-              <div className="hero-main-card">
-                <div className="hero-card-overlay"></div>
-                <img 
-                  src="/assets/ibAgROfpxJ6EiOkukBxvK41iIA.png" 
-                  alt="Wind turbines in golden farmland" 
-                  className="hero-main-img"
-                />
-                <div className="hero-card-bottom-info">
-                  <div className="hero-stat-pill">
-                    <span className="stat-pill-label">Mission 2026</span>
-                    <span className="stat-pill-val">90% Clean Energy Growth</span>
+            {/* Floating Glassmorphism Hero Stats & Widgets */}
+            <div className="hero-glass-widgets-row">
+              {/* Target Widget */}
+              <div className="hero-glass-widget">
+                <div className="widget-header">
+                  <div className="widget-dot"></div>
+                  <span className="widget-tag">Target</span>
+                </div>
+                <h3 className="widget-text">
+                  Accelerating renewable energy adoption by 90% across BRICS partner nations
+                </h3>
+              </div>
+
+              {/* Key Impact Stats Widget */}
+              <div className="hero-glass-widget stat-highlight-widget">
+                <div className="widget-header">
+                  <span className="widget-icon">⚡</span>
+                  <span className="widget-tag">Verified Progress</span>
+                </div>
+                <div className="widget-metrics-inline">
+                  <div>
+                    <strong className="metric-val">1.2M+</strong>
+                    <span className="metric-lbl">Tons CO₂ Cut</span>
+                  </div>
+                  <div className="metric-divider"></div>
+                  <div>
+                    <strong className="metric-val">185 GWh</strong>
+                    <span className="metric-lbl">Clean Power</span>
                   </div>
                 </div>
               </div>
 
-              {/* Side Floating Widget Cards */}
-              <div className="hero-side-cards">
-                <div className="hero-widget-card mission-widget">
-                  <div className="widget-header">
-                    <div className="widget-dot"></div>
-                    <span className="widget-tag">Target</span>
+              {/* Review & Trust Widget */}
+              <div className="hero-glass-widget review-glass-widget">
+                <div className="review-avatars">
+                  <div className="avatar-circle">
+                    <img src="/assets/j7IgTTiMBlOV06MaJzWzmoPNw5k.png" alt="User avatar" />
                   </div>
-                  <h3 className="widget-text">
-                    Our mission is to grow renewable energy adoption by 90% by 2026
-                  </h3>
+                  <div className="avatar-circle">
+                    <img src="/assets/dgPGRfxB7ngWR4EA5vLMmpWEf5I.png" alt="User avatar" />
+                  </div>
+                  <div className="avatar-circle">
+                    <img src="/assets/46De3EP856BP5nf1kfYTsOIIqqw.png" alt="User avatar" />
+                  </div>
                 </div>
-
-                <div className="hero-widget-card review-widget">
-                  <div className="review-avatars">
-                    <div className="avatar-circle">
-                      <img src="/assets/j7IgTTiMBlOV06MaJzWzmoPNw5k.png" alt="User avatar" />
-                    </div>
-                    <div className="avatar-circle">
-                      <img src="/assets/dgPGRfxB7ngWR4EA5vLMmpWEf5I.png" alt="User avatar" />
-                    </div>
-                    <div className="avatar-circle">
-                      <img src="/assets/46De3EP856BP5nf1kfYTsOIIqqw.png" alt="User avatar" />
-                    </div>
-                  </div>
-                  <div className="review-info">
-                    <div className="stars">★★★★★</div>
-                    <span className="review-text">500+ Verified 5-Star Reviews</span>
-                  </div>
+                <div className="review-info">
+                  <div className="stars">★★★★★</div>
+                  <span className="review-text">500+ Verified 5-Star Reviews</span>
                 </div>
               </div>
             </div>
