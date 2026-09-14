@@ -71,33 +71,6 @@ export default function Home() {
     }
   ];
 
-  const projects = [
-    {
-      id: 'sustainx',
-      client: 'Johnson Manufacturing',
-      title: 'Manufacturing Giant Achieves 65% Emission Reduction',
-      tag: 'Solar + Efficiency',
-      image: '/assets/ibAgROfpxJ6EiOkukBxvK41iIA.png',
-      stat: '65% Emissions Cut'
-    },
-    {
-      id: 'cleanpath',
-      client: 'Apex Global HQ',
-      title: 'Tech Campus Earns LEED Platinum Certification',
-      tag: 'Green Building',
-      image: '/assets/4NstCLeetsWI2DxicnCgTfZKL38.png',
-      stat: 'LEED Platinum'
-    },
-    {
-      id: 'greenshift',
-      client: 'Vanguard Logistics',
-      title: 'Renewable Microgrid Powers Fleet Charging Depot',
-      tag: 'Clean Mobility',
-      image: '/assets/S27Lb7w9Bj6JhGM4MULjLrgI1Pw.png',
-      stat: '40k Tons Saved'
-    }
-  ];
-
   return (
     <div className="home-page">
       {/* =========================================================================
@@ -354,67 +327,14 @@ export default function Home() {
       </section>
 
       {/* =========================================================================
-          SECTION 04: PROJECTS / SUCCESS STORIES
-          ========================================================================= */}
-      <section className="section projects-section" id="projects">
-        <div className="container">
-          <div className="services-header-row">
-            <div>
-              <div className="section-badge-wrapper">
-                <span className="section-badge">
-                  <span className="section-number">&#123; 04 &#125;</span>
-                  Recent Success Stories
-                </span>
-              </div>
-              <h2 className="section-heading">Stories of Measurable Impact</h2>
-              <p className="section-subheading">
-                See how our solutions help businesses cut emissions, save costs, and achieve real impact.
-              </p>
-            </div>
-            <Link to="/project" className="btn btn-secondary view-all-btn">
-              View All Projects
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                <line x1="5" y1="12" x2="19" y2="12"></line>
-                <polyline points="12 5 19 12 12 19"></polyline>
-              </svg>
-            </Link>
-          </div>
-
-          <div className="projects-grid">
-            {projects.map((proj) => (
-              <Link to={`/project/${proj.id}`} key={proj.id} className="project-card">
-                <div className="project-image-box">
-                  <img src={proj.image} alt={proj.title} className="project-img" />
-                  <span className="project-tag-pill">{proj.tag}</span>
-                </div>
-                <div className="project-card-body">
-                  <span className="project-client">{proj.client}</span>
-                  <h3 className="project-title">{proj.title}</h3>
-                  <div className="project-card-footer">
-                    <span className="project-stat-highlight">{proj.stat}</span>
-                    <span className="project-arrow-link">
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                        <line x1="7" y1="17" x2="17" y2="7"></line>
-                        <polyline points="7 7 17 7 17 17"></polyline>
-                      </svg>
-                    </span>
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* =========================================================================
-          SECTION 05: WHY CHOOSE US
+          SECTION 04: WHY CHOOSE US
           ========================================================================= */}
       <section className="section why-choose-section">
         <div className="container">
           <div className="why-choose-card">
             <div className="section-badge-wrapper">
               <span className="section-badge dark">
-                <span className="section-number">&#123; 05 &#125;</span>
+                <span className="section-number">&#123; 04 &#125;</span>
                 Why Leading Organizations Choose Us
               </span>
             </div>
@@ -449,13 +369,13 @@ export default function Home() {
       </section>
 
       {/* =========================================================================
-          SECTION 06: FAQS
+          SECTION 05: FAQS
           ========================================================================= */}
       <section className="section faq-section" id="faq">
         <div className="container">
           <div className="section-badge-wrapper" style={{ justifyContent: 'center' }}>
             <span className="section-badge">
-              <span className="section-number">&#123; 06 &#125;</span>
+              <span className="section-number">&#123; 05 &#125;</span>
               Frequently Asked Questions
             </span>
           </div>
