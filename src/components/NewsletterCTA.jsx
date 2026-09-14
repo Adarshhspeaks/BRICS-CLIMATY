@@ -16,9 +16,9 @@ export default function NewsletterCTA() {
       if (isSupabaseConfigured() && supabase) {
         const { error } = await supabase
           .from('newsletter_subscribers')
-          .upsert([{ email: email.trim().toLowerCase() }], { onConflict: 'email' });
+          .insert([{ email: email.trim().toLowerCase() }]);
 
-        if (error) {
+        if (error && error.code !== '23505') {
           console.error('Newsletter subscription error:', error);
         }
       }

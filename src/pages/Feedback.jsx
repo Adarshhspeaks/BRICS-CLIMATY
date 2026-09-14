@@ -98,9 +98,9 @@ export default function Feedback() {
           try {
             await supabase
               .from('newsletter_subscribers')
-              .upsert([{ email: formData.email.trim() }], { onConflict: 'email' });
+              .insert([{ email: formData.email.trim().toLowerCase() }]);
           } catch (nlErr) {
-            console.warn('Newsletter subscribe secondary error:', nlErr);
+            console.warn('Newsletter subscribe secondary notice:', nlErr);
           }
         }
       } else {
