@@ -134,10 +134,7 @@ export default function ClimateResilience() {
               Empowering cities, enterprises, and critical ecosystems across BRICS member states to anticipate, withstand, and rapidly recover from climate volatility and extreme weather shocks.
             </p>
             <div className="resilience-actions">
-              <Link to="/feedback" className="btn btn-primary btn-lg">
-                Request Resilience Audit
-              </Link>
-              <Link to="/impact" className="btn btn-secondary btn-lg">
+              <Link to="/impact" className="btn btn-primary btn-lg">
                 Explore Adaptation Metrics
               </Link>
             </div>
