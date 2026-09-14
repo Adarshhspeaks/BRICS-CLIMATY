@@ -104,10 +104,7 @@ export default function CleanAir() {
                 Delivering advanced emissions mitigation, particulate matter reduction, and intelligent airshed management to protect public health and accelerate net-zero skies across BRICS nations.
               </p>
               <div className="clean-air-actions">
-                <Link to="/feedback" className="btn btn-primary btn-lg">
-                  Request Air Quality Audit
-                </Link>
-                <Link to="/impact" className="btn btn-secondary btn-lg">
+                <Link to="/impact" className="btn btn-primary btn-lg">
                   View Air Quality Metrics
                 </Link>
               </div>
