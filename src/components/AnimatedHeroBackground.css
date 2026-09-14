@@ -1,0 +1,132 @@
+/* ==========================================================================
+   ANIMATED HERO WIND TURBINE BACKGROUND
+   ========================================================================== */
+
+.animated-hero-bg-wrapper {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
+  background-color: #102a1e;
+}
+
+/* Base Landscape Photo */
+.hero-landscape-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+  filter: brightness(1.04) contrast(1.02) saturate(1.08);
+  transform: scale(1.02);
+  transition: transform 14s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.hero-full-bg:hover .hero-landscape-img {
+  transform: scale(1.04);
+}
+
+/* Turbines Layer */
+.turbines-overlay-container {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+}
+
+.turbine-hub-anchor {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.turbine-rotor-svg {
+  width: 100%;
+  height: 100%;
+  animation: spinTurbine linear infinite;
+  transform-origin: center center;
+  will-change: transform;
+  filter: drop-shadow(0 4px 10px rgba(0, 20, 12, 0.35));
+}
+
+@keyframes spinTurbine {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Ambient Natural Sun Rays / Atmosphere */
+.ambient-sunlight-sweep {
+  position: absolute;
+  top: -20%;
+  right: -10%;
+  width: 70%;
+  height: 90%;
+  background: radial-gradient(circle at 60% 40%, rgba(254, 240, 138, 0.18) 0%, rgba(251, 191, 36, 0.08) 35%, transparent 70%);
+  pointer-events: none;
+  z-index: 3;
+  animation: sunlightPulse 8s ease-in-out infinite alternate;
+}
+
+@keyframes sunlightPulse {
+  0% {
+    opacity: 0.7;
+    transform: scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1.04);
+  }
+}
+
+/* Subtle Mist / River Atmosphere */
+.river-mist-glow {
+  position: absolute;
+  bottom: 15%;
+  left: 0;
+  width: 100%;
+  height: 35%;
+  background: linear-gradient(180deg, transparent 0%, rgba(187, 247, 208, 0.06) 50%, transparent 100%);
+  z-index: 3;
+  pointer-events: none;
+  animation: mistDrift 16s ease-in-out infinite alternate;
+}
+
+@keyframes mistDrift {
+  0% {
+    transform: translateX(-2%) translateY(0);
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateX(2%) translateY(-4px);
+    opacity: 0.9;
+  }
+}
+
+/* LIGHTER TONE OVERLAY (Lighter, sunlit, warm emerald vignette) */
+.hero-lighter-tone-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  /* Lighter, golden-emerald gradient allowing the sunlit landscape and spinning turbines to be bright & vivid */
+  background: radial-gradient(circle at 50% 28%, rgba(0, 18, 11, 0.22) 0%, rgba(0, 18, 11, 0.42) 58%, rgba(0, 18, 11, 0.75) 100%),
+              linear-gradient(180deg, rgba(0, 18, 11, 0.48) 0%, rgba(0, 18, 11, 0.15) 45%, rgba(0, 18, 11, 0.65) 85%, var(--bg-body, #f4f6f5) 100%);
+}
+
+@media (max-width: 768px) {
+  .hero-lighter-tone-overlay {
+    background: radial-gradient(circle at 50% 30%, rgba(0, 18, 11, 0.35) 0%, rgba(0, 18, 11, 0.55) 60%, rgba(0, 18, 11, 0.85) 100%),
+                linear-gradient(180deg, rgba(0, 18, 11, 0.55) 0%, rgba(0, 18, 11, 0.3) 50%, rgba(0, 18, 11, 0.8) 90%, var(--bg-body, #f4f6f5) 100%);
+  }
+}
