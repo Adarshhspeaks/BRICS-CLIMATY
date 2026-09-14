@@ -48,33 +48,6 @@ export default function About() {
     }
   ];
 
-  const team = [
-    {
-      name: 'Elena Rostova',
-      role: 'Founder & Chief Sustainability Officer',
-      image: '/assets/j7IgTTiMBlOV06MaJzWzmoPNw5k.png',
-      bio: 'Former climate policy advisor with 18+ years leading enterprise decarbonization strategies.'
-    },
-    {
-      name: 'Marcus Vance',
-      role: 'Head of Renewable Engineering',
-      image: '/assets/dgPGRfxB7ngWR4EA5vLMmpWEf5I.png',
-      bio: 'Licensed PE specializing in commercial solar microgrids and grid optimization.'
-    },
-    {
-      name: 'Dr. Sarah Lin',
-      role: 'Director of ESG & Carbon Analytics',
-      image: '/assets/46De3EP856BP5nf1kfYTsOIIqqw.png',
-      bio: 'PhD in Environmental Systems, leading GHG lifecycle assessments and scope 1-3 audits.'
-    },
-    {
-      name: 'David Thorne',
-      role: 'VP of Sustainable Architecture',
-      image: '/assets/1A7pNyKVy4twBXhUBw5vV5K6Kk.png',
-      bio: 'LEED Fellow with 2M+ sq. ft. of certified green buildings and zero-net facilities.'
-    }
-  ];
-
   return (
     <div className="about-page">
       {/* Hero Header */}
@@ -153,34 +126,6 @@ export default function About() {
                 <div className="value-icon-box">{val.icon}</div>
                 <h3 className="value-title">{val.title}</h3>
                 <p className="value-desc">{val.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Leadership Team */}
-      <section className="section about-team-section">
-        <div className="container">
-          <div className="section-badge-wrapper" style={{ justifyContent: 'center' }}>
-            <span className="section-badge">
-              <span className="section-number">&#123; Leadership &#125;</span>
-              Meet Our Sustainability Experts
-            </span>
-          </div>
-          <div className="section-heading-wrapper" style={{ textAlign: 'center' }}>
-            <h2 className="section-heading">Leaders Shaping a Cleaner Future</h2>
-          </div>
-
-          <div className="team-grid">
-            {team.map((member, idx) => (
-              <div key={idx} className="team-card">
-                <div className="team-img-wrapper">
-                  <img src={member.image} alt={member.name} className="team-img" />
-                </div>
-                <h3 className="team-name">{member.name}</h3>
-                <span className="team-role">{member.role}</span>
-                <p className="team-bio">{member.bio}</p>
               </div>
             ))}
           </div>
