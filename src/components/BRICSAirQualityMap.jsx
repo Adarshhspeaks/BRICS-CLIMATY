@@ -1,12 +1,5 @@
-import React, { useState } from "react";
-import {
-  MapContainer,
-  TileLayer,
-  CircleMarker,
-  Popup,
-  useMap
-} from "react-leaflet";
-
+import React, { useState, useEffect, useRef } from "react";
+import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "./BRICSAirQualityMap.css";
 
@@ -221,36 +214,123 @@ const getAQILabel = (aqi) => {
   return "Hazardous";
 };
 
-// MapController ensures proper sizing and smooth centering
-function MapController({ selectedCountry }) {
-  const map = useMap();
+export default function BRICSAirQualityMap() {
+  const [selectedCountry, setSelectedCountry] = useState(countries[2]);
+  const mapContainerRef = useRef(null);
+  const mapRef = useRef(null);
+  const markersRef = useRef({});
 
-  React.useEffect(() => {
-    if (!map) return;
+  useEffect(() => {
+    if (!mapContainerRef.current) return;
+
+    // Safety reset to prevent "Map container is already initialized"
+    if (mapRef.current) {
+      mapRef.current.remove();
+      mapRef.current = null;
+    }
+    if (mapContainerRef.current._leaflet_id) {
+      mapContainerRef.current._leaflet_id = null;
+    }
+
+    const map = L.map(mapContainerRef.current, {
+      center: [selectedCountry.lat, selectedCountry.lng],
+      zoom: 3,
+      minZoom: 1.5,
+      maxZoom: 18,
+      scrollWheelZoom: false,
+      zoomControl: true,
+      attributionControl: true
+    });
+
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution:
+        '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a> contributors',
+      maxZoom: 18
+    }).addTo(map);
+
+    mapRef.current = map;
+
+    // Create markers
+    const markers = {};
+    countries.forEach((country) => {
+      const isSelected = selectedCountry.code === country.code;
+      const marker = L.circleMarker([country.lat, country.lng], {
+        radius: isSelected ? 16 : 12,
+        fillColor: getAQIColor(country.aqi),
+        color: isSelected ? "#ffffff" : "#00140c",
+        weight: isSelected ? 3.5 : 2,
+        opacity: 1,
+        fillOpacity: 0.92
+      }).addTo(map);
+
+      const popupContent = `
+        <div style="font-family: inherit; font-size: 13px; line-height: 1.5; padding: 4px;">
+          <h4 style="margin: 0 0 4px; font-weight: 700; color: #00140c; font-size: 15px;">${country.name}</h4>
+          <div style="color: #556960; font-size: 12px;"><strong>Monitoring City:</strong> ${country.city}</div>
+          <div style="margin: 4px 0; font-size: 13px;"><strong>AQI:</strong> <span style="font-weight: 700; color: ${getAQIColor(country.aqi)}">${country.aqi}</span></div>
+          <div style="color: #556960; font-size: 12px;"><strong>Status:</strong> ${getAQILabel(country.aqi)}</div>
+        </div>
+      `;
+      marker.bindPopup(popupContent);
+
+      marker.on("click", () => {
+        setSelectedCountry(country);
+      });
+
+      markers[country.code] = marker;
+    });
+
+    markersRef.current = markers;
+
     const timer = setTimeout(() => {
-      map.invalidateSize();
+      if (mapRef.current) {
+        mapRef.current.invalidateSize();
+      }
     }, 150);
-    const handleResize = () => map.invalidateSize();
+
+    const handleResize = () => {
+      if (mapRef.current) {
+        mapRef.current.invalidateSize();
+      }
+    };
     window.addEventListener("resize", handleResize);
+
     return () => {
       clearTimeout(timer);
       window.removeEventListener("resize", handleResize);
+      if (mapRef.current) {
+        mapRef.current.remove();
+        mapRef.current = null;
+      }
     };
-  }, [map]);
+  }, []);
 
-  React.useEffect(() => {
-    if (!map || !selectedCountry) return;
-    map.flyTo([selectedCountry.lat, selectedCountry.lng], 4, {
+  // Update active marker & view whenever selectedCountry changes
+  useEffect(() => {
+    if (!mapRef.current || !selectedCountry) return;
+
+    mapRef.current.flyTo([selectedCountry.lat, selectedCountry.lng], 4, {
       duration: 1.2,
       easeLinearity: 0.25
     });
-  }, [map, selectedCountry]);
 
-  return null;
-}
-
-export default function BRICSAirQualityMap() {
-  const [selectedCountry, setSelectedCountry] = useState(countries[2]);
+    countries.forEach((c) => {
+      const marker = markersRef.current[c.code];
+      if (marker) {
+        const isSelected = c.code === selectedCountry.code;
+        marker.setStyle({
+          radius: isSelected ? 16 : 12,
+          color: isSelected ? "#ffffff" : "#00140c",
+          weight: isSelected ? 3.5 : 2,
+          fillColor: getAQIColor(c.aqi),
+          fillOpacity: 0.92
+        });
+        if (isSelected) {
+          marker.openPopup();
+        }
+      }
+    });
+  }, [selectedCountry]);
 
   return (
     <section className="brics-map-section">
@@ -273,50 +353,7 @@ export default function BRICSAirQualityMap() {
         <div className="brics-map-dashboard">
           {/* INTERACTIVE MAP */}
           <div className="map-container">
-            <MapContainer
-              center={[selectedCountry.lat, selectedCountry.lng]}
-              zoom={3}
-              scrollWheelZoom={false}
-              className="brics-map"
-            >
-              <MapController selectedCountry={selectedCountry} />
-              <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              />
-
-              {countries.map((country) => (
-                <CircleMarker
-                  key={country.code}
-                  center={[country.lat, country.lng]}
-                  radius={selectedCountry.code === country.code ? 18 : 14}
-                  pathOptions={{
-                    fillColor: getAQIColor(country.aqi),
-                    color: selectedCountry.code === country.code ? "#ffffff" : "#00140c",
-                    weight: selectedCountry.code === country.code ? 3.5 : 2,
-                    fillOpacity: 0.92
-                  }}
-                  eventHandlers={{
-                    click: () => setSelectedCountry(country)
-                  }}
-                >
-                  <Popup>
-                    <div className="map-popup">
-                      <h3>{country.name}</h3>
-                      <p>
-                        <strong>Monitoring City:</strong> {country.city}
-                      </p>
-                      <p>
-                        <strong>AQI:</strong> {country.aqi}
-                      </p>
-                      <p>
-                        <strong>Status:</strong> {getAQILabel(country.aqi)}
-                      </p>
-                    </div>
-                  </Popup>
-                </CircleMarker>
-              ))}
-            </MapContainer>
+            <div ref={mapContainerRef} className="brics-map" />
 
             <div className="aqi-map-legend">
               <span className="legend-title">AQI Index</span>

@@ -1,12 +1,5 @@
-import React, { useState, useEffect } from "react";
-import {
-  MapContainer,
-  TileLayer,
-  CircleMarker,
-  Popup,
-  useMap
-} from "react-leaflet";
-
+import React, { useState, useEffect, useRef } from "react";
+import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "./BRICSWeatherMap.css";
 
@@ -48,7 +41,6 @@ const countries = [
   }
 ];
 
-// WMO weather code -> human label + icon glyph
 const WEATHER_CODE_MAP = {
   0: { label: "Clear Sky", icon: "☀️" },
   1: { label: "Mainly Clear", icon: "🌤️" },
@@ -76,7 +68,6 @@ const WEATHER_CODE_MAP = {
 const getWeatherInfo = (code) =>
   WEATHER_CODE_MAP[code] || { label: "Clear / Mild", icon: "🌤️" };
 
-// Marker color follows current temperature, in °C
 const getTempColor = (tempC) => {
   if (tempC === null || tempC === undefined) return "#0b8e58";
   if (tempC <= 0) return "#3b82f6";
@@ -87,7 +78,6 @@ const getTempColor = (tempC) => {
   return "#ef4444";
 };
 
-// Fallback data in case client has network or CORS constraints
 const fallbackWeatherData = {
   BR: {
     name: "Brazil",
@@ -198,39 +188,108 @@ async function fetchCountryWeather(country) {
   };
 }
 
-function WeatherMapController({ selectedCode }) {
-  const map = useMap();
-  const activeCountry = countries.find((c) => c.code === selectedCode);
-
-  useEffect(() => {
-    if (!map) return;
-    const timer = setTimeout(() => {
-      map.invalidateSize();
-    }, 150);
-    const handleResize = () => map.invalidateSize();
-    window.addEventListener("resize", handleResize);
-    return () => {
-      clearTimeout(timer);
-      window.removeEventListener("resize", handleResize);
-    };
-  }, [map]);
-
-  useEffect(() => {
-    if (!map || !activeCountry) return;
-    map.flyTo([activeCountry.lat, activeCountry.lng], 4, {
-      duration: 1.2,
-      easeLinearity: 0.25
-    });
-  }, [map, activeCountry]);
-
-  return null;
-}
-
 export default function BRICSWeatherMap() {
   const [weatherData, setWeatherData] = useState(fallbackWeatherData);
   const [loading, setLoading] = useState(false);
   const [selectedCode, setSelectedCode] = useState("IN");
 
+  const mapContainerRef = useRef(null);
+  const mapRef = useRef(null);
+  const markersRef = useRef({});
+
+  // Initialize Map safely
+  useEffect(() => {
+    if (!mapContainerRef.current) return;
+
+    if (mapRef.current) {
+      mapRef.current.remove();
+      mapRef.current = null;
+    }
+    if (mapContainerRef.current._leaflet_id) {
+      mapContainerRef.current._leaflet_id = null;
+    }
+
+    const activeCountry = countries.find((c) => c.code === selectedCode) || countries[2];
+
+    const map = L.map(mapContainerRef.current, {
+      center: [activeCountry.lat, activeCountry.lng],
+      zoom: 3,
+      minZoom: 1.5,
+      maxZoom: 18,
+      scrollWheelZoom: false,
+      zoomControl: true,
+      attributionControl: true
+    });
+
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution:
+        '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a> contributors',
+      maxZoom: 18
+    }).addTo(map);
+
+    mapRef.current = map;
+
+    // Create markers
+    const markers = {};
+    countries.forEach((country) => {
+      const data = weatherData[country.code] || fallbackWeatherData[country.code];
+      const isSelected = selectedCode === country.code;
+      const info = data?.current
+        ? getWeatherInfo(data.current.weatherCode)
+        : { label: "Clear", icon: "🌤️" };
+
+      const marker = L.circleMarker([country.lat, country.lng], {
+        radius: isSelected ? 16 : 12,
+        fillColor: getTempColor(data?.current?.temp),
+        color: isSelected ? "#ffffff" : "#00140c",
+        weight: isSelected ? 3.5 : 2,
+        opacity: 1,
+        fillOpacity: 0.92
+      }).addTo(map);
+
+      const popupContent = `
+        <div style="font-family: inherit; font-size: 13px; line-height: 1.5; padding: 4px;">
+          <h4 style="margin: 0 0 4px; font-weight: 700; color: #00140c; font-size: 15px;">${country.name}</h4>
+          <div style="color: #556960; font-size: 12px;"><strong>Capital:</strong> ${country.city}</div>
+          <div style="margin: 4px 0; font-size: 13px;"><strong>Temp:</strong> <span style="font-weight: 700;">${Math.round(data?.current?.temp ?? 25)}°C</span> (${info.icon} ${info.label})</div>
+          <div style="color: #556960; font-size: 12px;"><strong>Humidity:</strong> ${Math.round(data?.current?.humidity ?? 60)}%</div>
+        </div>
+      `;
+      marker.bindPopup(popupContent);
+
+      marker.on("click", () => {
+        setSelectedCode(country.code);
+      });
+
+      markers[country.code] = marker;
+    });
+
+    markersRef.current = markers;
+
+    const timer = setTimeout(() => {
+      if (mapRef.current) {
+        mapRef.current.invalidateSize();
+      }
+    }, 150);
+
+    const handleResize = () => {
+      if (mapRef.current) {
+        mapRef.current.invalidateSize();
+      }
+    };
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("resize", handleResize);
+      if (mapRef.current) {
+        mapRef.current.remove();
+        mapRef.current = null;
+      }
+    };
+  }, []);
+
+  // Fetch live weather data asynchronously
   useEffect(() => {
     let isMounted = true;
 
@@ -263,7 +322,6 @@ export default function BRICSWeatherMap() {
 
     loadAll();
 
-    // Refresh every 15 minutes
     const interval = setInterval(loadAll, 15 * 60 * 1000);
 
     return () => {
@@ -272,77 +330,44 @@ export default function BRICSWeatherMap() {
     };
   }, []);
 
+  // Update map view & marker styles on selection change
+  useEffect(() => {
+    if (!mapRef.current || !selectedCode) return;
+
+    const activeCountry = countries.find((c) => c.code === selectedCode);
+    if (activeCountry) {
+      mapRef.current.flyTo([activeCountry.lat, activeCountry.lng], 4, {
+        duration: 1.2,
+        easeLinearity: 0.25
+      });
+    }
+
+    countries.forEach((c) => {
+      const marker = markersRef.current[c.code];
+      const data = weatherData[c.code] || fallbackWeatherData[c.code];
+      if (marker) {
+        const isSelected = c.code === selectedCode;
+        marker.setStyle({
+          radius: isSelected ? 16 : 12,
+          color: isSelected ? "#ffffff" : "#00140c",
+          weight: isSelected ? 3.5 : 2,
+          fillColor: getTempColor(data?.current?.temp),
+          fillOpacity: 0.92
+        });
+        if (isSelected) {
+          marker.openPopup();
+        }
+      }
+    });
+  }, [selectedCode, weatherData]);
+
   const selected = weatherData[selectedCode] || fallbackWeatherData[selectedCode];
-  const activeCountry = countries.find((c) => c.code === selectedCode);
 
   return (
     <div className="brics-weather-dashboard">
       {/* MAP */}
       <div className="weather-map-container">
-        <MapContainer
-          center={[activeCountry.lat, activeCountry.lng]}
-          zoom={3}
-          scrollWheelZoom={false}
-          className="brics-weather-map"
-        >
-          <WeatherMapController selectedCode={selectedCode} />
-          <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          />
-
-          {countries.map((country) => {
-            const data = weatherData[country.code] || fallbackWeatherData[country.code];
-            const temp = data?.current?.temp;
-            const info = data?.current
-              ? getWeatherInfo(data.current.weatherCode)
-              : { label: "Clear", icon: "🌤️" };
-
-            const isSelected = selectedCode === country.code;
-
-            return (
-              <CircleMarker
-                key={country.code}
-                center={[country.lat, country.lng]}
-                radius={isSelected ? 18 : 14}
-                pathOptions={{
-                  fillColor: getTempColor(temp),
-                  color: isSelected ? "#ffffff" : "#00140c",
-                  weight: isSelected ? 3.5 : 2,
-                  fillOpacity: 0.92
-                }}
-                eventHandlers={{
-                  click: () => setSelectedCode(country.code)
-                }}
-              >
-                <Popup>
-                  <div className="weather-map-popup">
-                    <h3>{country.name}</h3>
-                    <p>
-                      <strong>Capital:</strong> {country.city}
-                    </p>
-                    {data?.current && (
-                      <>
-                        <p>
-                          <strong>Temp:</strong>{" "}
-                          {Math.round(data.current.temp)}°C
-                        </p>
-                        <p>
-                          <strong>Condition:</strong> {info.icon}{" "}
-                          {info.label}
-                        </p>
-                        <p>
-                          <strong>Humidity:</strong>{" "}
-                          {Math.round(data.current.humidity)}%
-                        </p>
-                      </>
-                    )}
-                  </div>
-                </Popup>
-              </CircleMarker>
-            );
-          })}
-        </MapContainer>
+        <div ref={mapContainerRef} className="brics-weather-map" />
 
         <div className="weather-map-legend">
           <span className="legend-title">Live Temp (°C)</span>
