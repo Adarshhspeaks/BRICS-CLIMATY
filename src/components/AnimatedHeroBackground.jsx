@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './AnimatedHeroBackground.css';
 
 export default function AnimatedHeroBackground() {
+  const [videoError, setVideoError] = useState(false);
+
   // Turbines coordinates mapped relative to the background image
-  // percentages: [left%, top%, rotorSizePx, animationDurationSeconds, delaySeconds, isClockwise]
   const turbines = [
     // 1. Prominent Large Foreground Turbine (Right)
     { id: 't-fg-right', x: 71.4, y: 30.8, size: 360, duration: 6.8, delay: 0, opacity: 0.95 },
@@ -28,14 +29,30 @@ export default function AnimatedHeroBackground() {
 
   return (
     <div className="animated-hero-bg-wrapper">
-      {/* 1. Base High-Resolution Landscape Image */}
+      {/* 1. Direct HTML5 Video Background (plays if hero-windmills.mp4 or hero-video.mp4 is available) */}
+      {!videoError && (
+        <video
+          className="hero-bg-video"
+          autoPlay
+          loop
+          muted
+          playsInline
+          poster="/assets/ibAgROfpxJ6EiOkukBxvK41iIA.png"
+          onError={() => setVideoError(true)}
+        >
+          <source src="/assets/hero-windmills.mp4" type="video/mp4" />
+          <source src="/assets/hero-video.mp4" type="video/mp4" />
+        </video>
+      )}
+
+      {/* 2. Base High-Resolution Landscape Image */}
       <img
         src="/assets/ibAgROfpxJ6EiOkukBxvK41iIA.png"
         alt="Renewable wind energy landscape"
         className="hero-landscape-img"
       />
 
-      {/* 2. Rotating Windmill Blades Overlay Layer */}
+      {/* 3. Smooth Rotating Windmill Blades System */}
       <div className="turbines-overlay-container">
         {turbines.map((t) => (
           <div
@@ -49,7 +66,6 @@ export default function AnimatedHeroBackground() {
               opacity: t.opacity,
             }}
           >
-            {/* 3-Blade Aerodynamic Rotor SVG */}
             <svg
               className="turbine-rotor-svg"
               viewBox="-100 -100 200 200"
@@ -100,11 +116,11 @@ export default function AnimatedHeroBackground() {
         ))}
       </div>
 
-      {/* 3. Ambient Sunlight Rays & Gentle River Shimmer */}
+      {/* 4. Ambient Sunlight Rays & Gentle Water Shimmer */}
       <div className="ambient-sunlight-sweep"></div>
       <div className="river-mist-glow"></div>
 
-      {/* 4. Balanced Lighter Golden-Emerald Vignette Overlay (Tone lightened) */}
+      {/* 5. Much Lighter, Sunlit Warm Emerald-Gold Atmospheric Overlay */}
       <div className="hero-lighter-tone-overlay"></div>
     </div>
   );
