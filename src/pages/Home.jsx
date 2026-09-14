@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import AnimatedHeroBackground from '../components/AnimatedHeroBackground';
 import PartnersMarquee from '../components/PartnersMarquee';
 import FAQAccordion from '../components/FAQAccordion';
 import ReadyCTA from '../components/ReadyCTA';
@@ -105,8 +104,15 @@ export default function Home() {
           HERO SECTION (FULL BACKGROUND)
           ========================================================================= */}
       <section className="hero-section hero-full-bg">
-        {/* Dynamic Animated Wind Turbine Background & Lighter Sunlit Atmospheric Tone */}
-        <AnimatedHeroBackground />
+        {/* Full-Bleed Wind Turbine Background with Lighter Sunlit Tone */}
+        <div className="hero-bg-layer">
+          <img 
+            src="/assets/ibAgROfpxJ6EiOkukBxvK41iIA.png" 
+            alt="Wind turbines in golden farmland" 
+            className="hero-bg-image"
+          />
+          <div className="hero-bg-overlay"></div>
+        </div>
 
         <div className="container hero-container">
           <div className="hero-content">
