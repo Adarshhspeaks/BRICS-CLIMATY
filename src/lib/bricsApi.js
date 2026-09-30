@@ -193,6 +193,29 @@ export function getAQILabel(aqi) {
 }
 
 // -----------------------------------------------------------------------------
+// API Keys (set in .env, see .env.example)
+//   Climate Resilience page -> VITE_WEATHER_API_KEY
+//   Clean Air page          -> VITE_AIR_QUALITY_API_KEY
+// With no key, the free public Open-Meteo endpoints are used (non-commercial).
+// -----------------------------------------------------------------------------
+const WEATHER_API_KEY = import.meta.env.VITE_WEATHER_API_KEY || "";
+const AIR_QUALITY_API_KEY = import.meta.env.VITE_AIR_QUALITY_API_KEY || "";
+
+const WEATHER_BASE = WEATHER_API_KEY
+  ? "https://customer-api.open-meteo.com/v1/forecast"
+  : "https://api.open-meteo.com/v1/forecast";
+const AIR_QUALITY_BASE = AIR_QUALITY_API_KEY
+  ? "https://customer-air-quality-api.open-meteo.com/v1/air-quality"
+  : "https://air-quality-api.open-meteo.com/v1/air-quality";
+
+const WEATHER_KEY_PARAM = WEATHER_API_KEY
+  ? `&apikey=${encodeURIComponent(WEATHER_API_KEY)}`
+  : "";
+const AIR_QUALITY_KEY_PARAM = AIR_QUALITY_API_KEY
+  ? `&apikey=${encodeURIComponent(AIR_QUALITY_API_KEY)}`
+  : "";
+
+// -----------------------------------------------------------------------------
 // In-Memory Telemetry Cache (5 Minutes)
 // -----------------------------------------------------------------------------
 const cache = {
@@ -215,11 +238,12 @@ export async function fetchAllBricsWeather() {
   const results = await Promise.allSettled(
     BRICS_COUNTRIES.map(async (c) => {
       const url =
-        `https://api.open-meteo.com/v1/forecast?latitude=${c.lat}` +
+        `${WEATHER_BASE}?latitude=${c.lat}` +
         `&longitude=${c.lng}` +
         `&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m,is_day` +
         `&daily=temperature_2m_max,temperature_2m_min,weather_code` +
-        `&forecast_days=7&timezone=auto`;
+        `&forecast_days=7&timezone=auto` +
+        WEATHER_KEY_PARAM;
 
       const res = await fetch(url);
       if (!res.ok) throw new Error(`Weather fetch failed for ${c.name}`);
@@ -284,10 +308,11 @@ export async function fetchAllBricsAirQuality() {
   const results = await Promise.allSettled(
     BRICS_COUNTRIES.map(async (c) => {
       const url =
-        `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${c.lat}` +
+        `${AIR_QUALITY_BASE}?latitude=${c.lat}` +
         `&longitude=${c.lng}` +
         `&current=european_aqi,us_aqi,pm10,pm2_5,nitrogen_dioxide,sulphur_dioxide,ozone,carbon_monoxide` +
-        `&timezone=auto`;
+        `&timezone=auto` +
+        AIR_QUALITY_KEY_PARAM;
 
       const res = await fetch(url);
       if (!res.ok) throw new Error(`AQI fetch failed for ${c.name}`);
