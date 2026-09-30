@@ -1,6 +1,6 @@
 # 🌿 BRICS-CLIMATY — Clean Air & Climate Resilience Platform
 
-[![Vercel Deployment](https://img.shields.io/badge/Deploy-Vercel-black?style=flat&logo=vercel)](https://vercel.com)
+[![Render Deployment](https://img.shields.io/badge/Deploy-Render-46E3B7?style=flat&logo=render&logoColor=white)](https://render.com)
 [![React](https://img.shields.io/badge/React-18.3.1-61DAFB?style=flat&logo=react)](https://react.dev)
 [![Vite](https://img.shields.io/badge/Vite-5.4.3-646CFF?style=flat&logo=vite)](https://vitejs.dev)
 [![Supabase](https://img.shields.io/badge/Supabase-Database%20%26%20Auth-3ECF8E?style=flat&logo=supabase)](https://supabase.com)
@@ -66,7 +66,7 @@ The platform bridges policy frameworks, industrial decarbonization engineering, 
 | **Styling & CSS Architecture** | **Modern Vanilla CSS** | Custom design tokens, glassmorphism, responsive flex/grid layouts, smooth animations, and dark/light accents. |
 | **Iconography** | **Lucide React** (`v0.441.0`) & Custom SVG | Scalable, pixel-perfect modern vector iconography. |
 | **Typography** | **Google Fonts** (*Inter & Outfit*) | High-legibility modern sans-serif typography system. |
-| **Deployment & Hosting** | **Vercel** (`vercel.json`) | Edge CDN deployment with automatic SPA route rewrite configuration. |
+| **Deployment & Hosting** | **Render** (`render.yaml`) | Static site deployment with SPA routing and automatic CI/CD on git push. |
 | **Version Control** | **Git & GitHub** | Source code management and CI/CD pipelines. |
 
 ---
@@ -76,6 +76,7 @@ The platform bridges policy frameworks, industrial decarbonization engineering, 
 ```plaintext
 CACR/
 ├── public/                     # Static assets, hero images, and branding assets
+│   ├── _redirects             # SPA routing rewrite rules for static hosts
 ├── src/
 │   ├── components/             # Reusable UI components
 │   │   ├── BRICSWeatherMap.jsx # Live Leaflet weather & telemetry map
@@ -102,7 +103,7 @@ CACR/
 │   ├── App.jsx                 # Route definitions & layout wrappers
 │   ├── main.jsx                # Application bootstrap & DOM mount
 │   └── index.css               # Global design tokens, resets & layout utilities
-├── vercel.json                 # Vercel SPA rewrite routing rules
+├── render.yaml                 # Render static site blueprint & rewrite configuration
 ├── supabase_schema.sql         # Database schema & RLS policies
 └── package.json                # Project dependencies and build scripts
 ```
