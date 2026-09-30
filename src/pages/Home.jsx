@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import PartnersMarquee from '../components/PartnersMarquee';
-import FAQAccordion from '../components/FAQAccordion';
 import './Home.css';
 
 export default function Home() {
@@ -116,58 +115,6 @@ export default function Home() {
                 Explore Our Solutions
               </Link>
             </div>
-
-            {/* Floating Glassmorphism Hero Stats & Widgets */}
-            <div className="hero-glass-widgets-row">
-              {/* Target Widget */}
-              <div className="hero-glass-widget">
-                <div className="widget-header">
-                  <div className="widget-dot"></div>
-                  <span className="widget-tag">Target</span>
-                </div>
-                <h3 className="widget-text">
-                  Accelerating renewable energy adoption by 90% across BRICS partner nations
-                </h3>
-              </div>
-
-              {/* Key Impact Stats Widget */}
-              <div className="hero-glass-widget stat-highlight-widget">
-                <div className="widget-header">
-                  <span className="widget-icon">⚡</span>
-                  <span className="widget-tag">Verified Progress</span>
-                </div>
-                <div className="widget-metrics-inline">
-                  <div>
-                    <strong className="metric-val">1.2M+</strong>
-                    <span className="metric-lbl">Tons CO₂ Cut</span>
-                  </div>
-                  <div className="metric-divider"></div>
-                  <div>
-                    <strong className="metric-val">185 GWh</strong>
-                    <span className="metric-lbl">Clean Power</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Review & Trust Widget */}
-              <div className="hero-glass-widget review-glass-widget">
-                <div className="review-avatars">
-                  <div className="avatar-circle">
-                    <img src="/assets/j7IgTTiMBlOV06MaJzWzmoPNw5k.png" alt="User avatar" />
-                  </div>
-                  <div className="avatar-circle">
-                    <img src="/assets/dgPGRfxB7ngWR4EA5vLMmpWEf5I.png" alt="User avatar" />
-                  </div>
-                  <div className="avatar-circle">
-                    <img src="/assets/46De3EP856BP5nf1kfYTsOIIqqw.png" alt="User avatar" />
-                  </div>
-                </div>
-                <div className="review-info">
-                  <div className="stars">★★★★★</div>
-                  <span className="review-text">500+ Verified 5-Star Reviews</span>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </section>
@@ -176,71 +123,13 @@ export default function Home() {
       <PartnersMarquee />
 
       {/* =========================================================================
-          SECTION 01: ABOUT GREENVOLT
-          ========================================================================= */}
-      <section className="section about-section" id="about">
-        <div className="container">
-          <div className="section-badge-wrapper">
-            <span className="section-badge">
-              <span className="section-number">&#123; 01 &#125;</span>
-              About BRICS-CLIMATY
-            </span>
-          </div>
-
-          <div className="section-heading-wrapper">
-            <h2 className="section-heading">
-              We help businesses reduce carbon emissions, adopt clean energy, and achieve measurable progress toward net-zero goals.
-            </h2>
-            <p className="section-subheading">
-              Expert sustainability and renewable energy solutions to cut carbon emissions and help your business reach net-zero. Get a free carbon footprint assessment today.
-            </p>
-          </div>
-
-          <div className="about-cards-grid">
-            <div className="about-feature-card">
-              <div className="feature-icon-box">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
-                </svg>
-              </div>
-              <h3 className="feature-title">End-to-End Strategy</h3>
-              <p className="feature-desc">From initial energy audits to turn-key installation and ESG reporting, we manage the entire sustainability lifecycle.</p>
-            </div>
-
-            <div className="about-feature-card">
-              <div className="feature-icon-box">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <line x1="18" y1="20" x2="18" y2="10"></line>
-                  <line x1="12" y1="20" x2="12" y2="4"></line>
-                  <line x1="6" y1="20" x2="6" y2="14"></line>
-                </svg>
-              </div>
-              <h3 className="feature-title">Measurable ROI</h3>
-              <p className="feature-desc">Our renewable solutions deliver immediate energy savings, rapid payback periods, and enhanced brand equity.</p>
-            </div>
-
-            <div className="about-feature-card">
-              <div className="feature-icon-box">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <circle cx="12" cy="12" r="10"></circle>
-                  <polyline points="12 6 12 12 16 14"></polyline>
-                </svg>
-              </div>
-              <h3 className="feature-title">Industry-Certified</h3>
-              <p className="feature-desc">Accredited LEED APs, CEMs, and carbon accountants bringing 15+ years of trusted engineering expertise.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* =========================================================================
-          SECTION 02: IMPACT IN NUMBERS
+          SECTION 01: IMPACT IN NUMBERS
           ========================================================================= */}
       <section className="section impact-numbers-section">
         <div className="container">
           <div className="section-badge-wrapper">
             <span className="section-badge">
-              <span className="section-number">&#123; 02 &#125;</span>
+              <span className="section-number">&#123; 01 &#125;</span>
               Our Environmental Impact in Numbers
             </span>
           </div>
@@ -274,7 +163,7 @@ export default function Home() {
       </section>
 
       {/* =========================================================================
-          SECTION 03: SERVICES
+          SECTION 02: SERVICES
           ========================================================================= */}
       <section className="section services-section" id="services">
         <div className="container">
@@ -282,7 +171,7 @@ export default function Home() {
             <div>
               <div className="section-badge-wrapper">
                 <span className="section-badge">
-                  <span className="section-number">&#123; 03 &#125;</span>
+                  <span className="section-number">&#123; 02 &#125;</span>
                   Comprehensive Sustainability
                 </span>
               </div>
@@ -321,71 +210,6 @@ export default function Home() {
               </div>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* =========================================================================
-          SECTION 04: WHY CHOOSE US
-          ========================================================================= */}
-      <section className="section why-choose-section">
-        <div className="container">
-          <div className="why-choose-card">
-            <div className="section-badge-wrapper">
-              <span className="section-badge dark">
-                <span className="section-number">&#123; 04 &#125;</span>
-                Why Leading Organizations Choose Us
-              </span>
-            </div>
-            <h2 className="why-choose-heading">
-              Trusted by top organizations for proven strategies, expert guidance, and measurable results.
-            </h2>
-
-            <div className="pillars-grid">
-              <div className="pillar-item">
-                <span className="pillar-badge">&#123; Sustainability &#125;</span>
-                <p className="pillar-text">
-                  Certified experts with 15+ years of experience delivering proven, industry-backed sustainability strategies.
-                </p>
-              </div>
-
-              <div className="pillar-item">
-                <span className="pillar-badge">&#123; Data-Driven &#125;</span>
-                <p className="pillar-text">
-                  Data-driven recommendations with real-time dashboards and quarterly impact reports to track your progress.
-                </p>
-              </div>
-
-              <div className="pillar-item">
-                <span className="pillar-badge">&#123; End-to-End &#125;</span>
-                <p className="pillar-text">
-                  From assessment to implementation and monitoring, our dedicated team ensures seamless execution and continuous optimization.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* =========================================================================
-          SECTION 05: FAQS
-          ========================================================================= */}
-      <section className="section faq-section" id="faq">
-        <div className="container">
-          <div className="section-badge-wrapper" style={{ justifyContent: 'center' }}>
-            <span className="section-badge">
-              <span className="section-number">&#123; 05 &#125;</span>
-              Frequently Asked Questions
-            </span>
-          </div>
-
-          <div className="section-heading-wrapper" style={{ textAlign: 'center' }}>
-            <h2 className="section-heading">Find Clear Answers</h2>
-            <p className="section-subheading" style={{ margin: '0 auto' }}>
-              Find answers to the most common questions about our sustainability solutions, renewable energy services, and carbon reduction strategies.
-            </p>
-          </div>
-
-          <FAQAccordion />
         </div>
       </section>
     </div>
