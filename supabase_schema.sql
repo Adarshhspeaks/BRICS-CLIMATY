@@ -1,5 +1,5 @@
 -- ==============================================================================
--- BRICS-CLIMATY: Supabase Database Schema
+-- BRICS-CLIMATY: Supabase Database Schema & RLS Policies
 -- Run this SQL in your Supabase SQL Editor (Dashboard -> SQL Editor -> New Query)
 -- ==============================================================================
 
@@ -41,31 +41,59 @@ create table if not exists public.newsletter_subscribers (
 );
 
 -- ==============================================================================
--- Row Level Security (RLS) Policies
--- Enables safe direct inserts from the web frontend without exposing write/delete
+-- Row Level Security (RLS) & Permissions Setup
 -- ==============================================================================
 
 alter table public.feedback enable row level security;
 alter table public.contact_inquiries enable row level security;
 alter table public.newsletter_subscribers enable row level security;
 
--- Allow anonymous users to submit feedback
+-- Drop existing policies if any
+drop policy if exists "Allow public insert to feedback" on public.feedback;
+drop policy if exists "Allow public select to feedback" on public.feedback;
+drop policy if exists "Allow public insert to contact_inquiries" on public.contact_inquiries;
+drop policy if exists "Allow public select to contact_inquiries" on public.contact_inquiries;
+drop policy if exists "Allow public insert to newsletter_subscribers" on public.newsletter_subscribers;
+drop policy if exists "Allow public select to newsletter_subscribers" on public.newsletter_subscribers;
+
+-- Create policies for public insert and select
 create policy "Allow public insert to feedback"
 on public.feedback
 for insert
-to anon, authenticated
+to public
 with check (true);
 
--- Allow anonymous users to submit contact/audit requests
+create policy "Allow public select to feedback"
+on public.feedback
+for select
+to public
+using (true);
+
 create policy "Allow public insert to contact_inquiries"
 on public.contact_inquiries
 for insert
-to anon, authenticated
+to public
 with check (true);
 
--- Allow anonymous users to subscribe to newsletter
+create policy "Allow public select to contact_inquiries"
+on public.contact_inquiries
+for select
+to public
+using (true);
+
 create policy "Allow public insert to newsletter_subscribers"
 on public.newsletter_subscribers
 for insert
-to anon, authenticated
+to public
 with check (true);
+
+create policy "Allow public select to newsletter_subscribers"
+on public.newsletter_subscribers
+for select
+to public
+using (true);
+
+-- Explicitly grant table privileges to anonymous and authenticated users
+grant all on table public.feedback to anon, authenticated, service_role;
+grant all on table public.contact_inquiries to anon, authenticated, service_role;
+grant all on table public.newsletter_subscribers to anon, authenticated, service_role;
